@@ -42,14 +42,3 @@ from (
 ) t
 where rank <= 5
 
--- 5
-
-select mnt, shop_ref, income, income / inc_month as segment
-from (
-    select to_char("date", 'month') as mnt, shop_ref,
-           sum(price_per_one*amount) as income,
-           sum(sum(price_per_one*amount)) over (partition by to_char("date", 'month')) inc_month
-    from sales
-    group by to_char("date", 'month'), shop_ref
-) t
-order by mnt, segment desc
